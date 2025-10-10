@@ -23,7 +23,7 @@
     "class-variance-authority": "^0",
     "clsx": "^2",
     "lucide-react": "^0.316.0",
-    "react": "^18",
+    "react": "^19",
     "react-dom": "^18",
     "tailwind-merge": "^2",
     "tailwindcss-animate": "^1"
@@ -40,7 +40,7 @@
     "@storybook/test-runner": "^0",
     "@types/jest": "^29",
     "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/react": "^19",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^6",
     "@typescript-eslint/parser": "^6",
