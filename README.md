@@ -1,8 +1,5 @@
 # Golay's Code C23 implementation
 
-Used template for the project:
-[![](https://github.com/zetavg/react-vite-radix-tailwind-typescript-template/assets/3784687/947a2a60-d23b-4e06-8707-016130663107)](https://zetavg.github.io/react-vite-radix-tailwind-typescript-template/)
-
 ## How to run this (static App):
 In the project directory, you can run:
 ### `npm run preview`
