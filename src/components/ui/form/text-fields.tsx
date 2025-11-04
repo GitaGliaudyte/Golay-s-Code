@@ -29,21 +29,26 @@ export function TextFields({ probability, encoderRef: externalEncoderRef, decode
 
   const convertedText = useMemo(() => (text.length > 0 ? convertString(text) : ''), [text])
 
+  // Effect: Encode, send through channel, decode, and convert back to text
   useEffect(() => {
     if (convertedText.length > 0) {
       try {
+        // Pass raw binary through the channel to simulate errors
         const afterChannelInsecure = sendThroughBSC(convertedText, probability)
-
         const insecureReceived = convertBinaryStringToText(afterChannelInsecure.slice(0, convertedText.length))
         setInsecureText(insecureReceived)
 
+        // Encode using Golay encoder
         const encoded = encoderRef.current!.encode(convertedText)
 
+        // Send encoded binary through the channel
         const afterChannel = sendThroughBSC(encoded, probability)
 
+        // Decode using Golay decoder
         const decodedBinaryFull = decoderRef.current!.decode(afterChannel)
         const decodedBinary = decodedBinaryFull.slice(0, convertedText.length)
 
+        // Convert decoded binary back to text
         const decoded = convertBinaryStringToText(decodedBinary)
         setDecodedText(decoded)
       } catch (e: any) {

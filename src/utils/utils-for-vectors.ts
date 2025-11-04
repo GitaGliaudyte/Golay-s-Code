@@ -1,6 +1,13 @@
 import { numberArrayToString } from "./utils-for-strings";
 
-// Utility functions for vector and matrix operations
+/**
+ * Multiplies a binary vector by a binary matrix using modulo 2 arithmetic.
+ *
+ * @param vector - An array of numbers representing the vector (e.g., [1,0,1]).
+ * @param matrix - A 2D array of numbers representing the matrix. Its row count must equal the vector length.
+ * @throws Throws an error if the matrix row count does not match the vector length.
+ * @returns A string representing the resulting binary vector after multiplication (each element modulo 2).
+ */
 export const multiplyVectorByMatrix = (vector: number[], matrix: number[][]): string => {
     const vectorLength = vector.length;
     if (matrix.length !== vectorLength) {
@@ -20,10 +27,24 @@ export const multiplyVectorByMatrix = (vector: number[], matrix: number[][]): st
     return numberArrayToString(result);
 };
 
+/**
+ * Calculates the weight of a binary vector string.
+ *
+ * @param vector - A string representing a binary vector (e.g., "10101").
+ * @returns The number of '1' bits in the vector.
+ */
 export const vectorWeight = (vector: string): number => {
     return vector.split('').reduce((sum, bit) => sum + (bit === '1' ? 1 : 0), 0);
 }
 
+/**
+ * Adds two binary vectors element-wise modulo 2.
+ *
+ * @param a - A string representing the first binary vector (e.g., "1010").
+ * @param b - A string representing the second binary vector of the same length.
+ * @throws Throws an error if the vector lengths do not match or if the strings contain non-numeric characters.
+ * @returns A string representing the element-wise modulo 2 sum of the two vectors.
+ */
 export const addVectors = (a: string, b: string): string => {
     if(a.length !== b.length){
         throw new Error("Lengths do not match.");

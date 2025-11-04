@@ -10,6 +10,14 @@ export class Encoder {
         row.concat(GOLAY_B_MATRIX[i].slice(0, -1))
     );
 
+    /**
+     * Encodes a binary string into one or more 23-bit Golay codewords.
+     *
+     * @param {string} value - Binary input string (e.g., "101001...").
+     * @returns {string} - Encoded binary string consisting of concatenated 23-bit codewords.
+     *
+     * @throws {Error} If the input is not a valid binary string.
+     */
     public encode = (value: string): string => {
         if (!validateBinaryVector(value)) {
             throw new Error("Input must be a binary string.");

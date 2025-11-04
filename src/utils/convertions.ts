@@ -6,6 +6,12 @@ export type ImageFileData = {
     mimeType: string;
 };
 
+/**
+ * Converts a UTF-8 text string into its binary representation.
+ *
+ * @param {string} input - Input text string.
+ * @returns {string} - A binary string representing the UTF-8 bytes of the input.
+ */
 export const convertString = (input: string): string => {
     const encoder = new TextEncoder();
     const bytes = encoder.encode(input); // UTF-8 bytes
@@ -14,6 +20,12 @@ export const convertString = (input: string): string => {
                 .join('');
 }
 
+/**
+ * Converts a binary string back into human-readable text (UTF-8 decoding).
+ *
+ * @param {string} binaryString - The binary string to convert.
+ * @returns {string} - The decoded text string.
+ */
 export const convertBinaryStringToText = (binaryString: string): string => {
     const padded = binaryString.padEnd(Math.ceil(binaryString.length / 8) * 8, '0');
 
@@ -30,6 +42,15 @@ export enum SupportedImageFileFormat {
     BMP = 'image/bmp',
 }
 
+/**
+ * Converts a Blob (e.g., uploaded image) into a structured {@link ImageFileData} object.
+ * Reads the file, verifies its format, and extracts binary content and header data.
+ *
+ * @param {Blob} image - Image Blob to convert.
+ * @returns {Promise<ImageFileData>} - Promise resolving to structured image data.
+ *
+ * @throws {Error} If the file cannot be read or the format is unsupported.
+ */
 export const blobToImageData = async (image: Blob): Promise<ImageFileData> => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -78,6 +99,15 @@ export const blobToImageData = async (image: Blob): Promise<ImageFileData> => {
     });
 };
 
+/**
+ * Converts {@link ImageFileData} back into a Blob (image file).
+ * Reassembles the binary data and prepends the original header.
+ *
+ * @param {ImageFileData} imageData - The image data object containing header and binary content.
+ * @returns {Blob} - A reconstructed image Blob.
+ *
+ * @throws {Error} If the binary string is invalid or the format is unsupported.
+ */
 export const imageDataToBlob = (imageData: ImageFileData): Blob => {
     if (!validateBinaryVector(imageData.binaryString)) throw new Error('Received an unexpected non-binary string.');
 

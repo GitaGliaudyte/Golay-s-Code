@@ -42,22 +42,25 @@ export function ImageUpload({ probability, encoderRef: externalEncoderRef, decod
         getImageBinaryValue();
     }, [imageFile]);
 
+    // Non-coded image processed through the channel
     const finalInsecureImage = useMemo(() => {
         if (!imageBinaryContents) return;
 
         const receivedBinaryValue = sendThroughBSC(imageBinaryContents.binaryString, probability);
-    const insecureBlob = imageDataToBlob({
+        const insecureBlob = imageDataToBlob({
             ...imageBinaryContents,
             binaryString: receivedBinaryValue,
         });
         return URL.createObjectURL(insecureBlob);
     }, [probability, imageBinaryContents]);
 
+    // Encode the image binary using Golay code
     const encodedBinaryValue = useMemo(() => {
         if (!imageBinaryContents) return;
         return encoderRef.current!.encode(imageBinaryContents.binaryString);
     }, [encoderRef, imageBinaryContents]);
 
+    // Coded image after sending through channel and decoding
     const finalSecureImage = useMemo(() => {
         if (!encodedBinaryValue || !imageBinaryContents) return;
 

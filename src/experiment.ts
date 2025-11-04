@@ -3,7 +3,13 @@ import { sendThroughBSC } from "./golay_implementation/channel";
 import { Decoder } from "./golay_implementation/decode";
 import { Encoder } from "./golay_implementation/encode";
 
-// Helper: compare two binary strings and count bit differences
+/**
+ * Compares two binary strings and counts the number of differing bits.
+ *
+ * @param a - The first binary string (e.g., "10101").
+ * @param b - The second binary string (e.g., "10011").
+ * @returns The number of positions where the two strings differ. Comparison stops at the length of the shorter string.
+ */
 function countBitErrors(a: string, b: string): number {
   const minLen = Math.min(a.length, b.length);
   let diff = 0;

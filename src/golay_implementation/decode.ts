@@ -12,6 +12,14 @@ export class Decoder {
     private static controlMatrix: number[][] =
         IDENTITY_MATRIX.concat(GOLAY_B_MATRIX);
 
+    /**
+     * Decodes a binary string consisting of one or more concatenated
+     * Golay-encoded codewords.
+     *
+     * @param {string} value - Encoded binary string (multiple of 23 bits).
+     * @returns {string} - The decoded binary string (data portion only).
+     * @throws {Error} If the input is not a valid binary string or has an invalid length.
+     */
     public decode = (value: string): string => {
         if (value.length % Decoder.codeLength !== 0) {
             throw new Error(
@@ -27,6 +35,15 @@ export class Decoder {
         return substrings.map(str => this.decodeSubstring(str)).join('');
     };
 
+    /**
+     * Decodes a single 23-bit Golay codeword.
+     * Adds a parity bit to make the word's weight odd, searches for an error vector,
+     * and reconstructs the corrected data bits.
+     *
+     * @param {string} substring - A 23-bit encoded binary string.
+     * @returns {string} - The 12-bit decoded data portion.
+     * @throws {Error} If decoding fails and retransmission is required.
+     */
     private decodeSubstring = (substring: string): string => {
         const word = substring.concat(
             vectorWeight(substring) % 2 === 0 ? '1' : '0', // Append parity bit to make the weight odd
@@ -39,6 +56,12 @@ export class Decoder {
         return codeword.slice(0, 12);
     };
 
+    /**
+     * Searches for the most likely error vector for a given codeword.
+     *
+     * @param {string} codeword - The received binary codeword (including parity bit).
+     * @returns {[string, string] | undefined} - A pair of error vectors if found, otherwise undefined.
+     */
     private searchForErrorVector = (codeword: string): [string, string] | undefined => {
         const wVector = stringToNumberArray(codeword);
         const syndrome = this.calculateFirstSyndrome(wVector);
@@ -57,14 +80,33 @@ export class Decoder {
         return undefined;
     }
 
+    /**
+     * Calculates the first syndrome for the given codeword.
+     *
+     * @param {number[]} w - The received codeword as a numeric vector.
+     * @returns {string} - The computed syndrome as a binary string.
+     */
     private calculateFirstSyndrome = (w: number[]): string => {
         return multiplyVectorByMatrix(w, Decoder.controlMatrix);
     }
 
+    /**
+     * Calculates the second syndrome from the first syndrome.
+     *
+     * @param {string} s - The first syndrome as a binary string.
+     * @returns {string} - The resulting second syndrome.
+     */
     private calculateSecondSyndrome = (s: string): string => {
         return multiplyVectorByMatrix(stringToNumberArray(s), GOLAY_B_MATRIX);
     }
 
+    /**
+     * Attempts to find an error vector by evaluating the weight of the given syndrome.
+     * If the syndrome weight is small (≤ 3), correction is possible.
+     *
+     * @param {string} syndrome - Syndrome vector to test.
+     * @returns {[string, string] | undefined} - A valid error vector pair or undefined if not found.
+     */
     private useVectorWeightToSearch = (syndrome: string): [string, string] | undefined => {
         let u: [string, string] | undefined = undefined;
 

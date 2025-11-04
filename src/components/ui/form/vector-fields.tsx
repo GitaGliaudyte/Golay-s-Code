@@ -73,6 +73,7 @@ export function VectorFields({ probability, encoderRef: externalEncoderRef, deco
         }
     }, [encodedVector, probability]);
 
+    // Calculate error vector (XOR of encoded and received)
     useEffect(() => {
         try {
             const xor = binaryStringXOR(encodedVector, receivedVector);
@@ -85,6 +86,7 @@ export function VectorFields({ probability, encoderRef: externalEncoderRef, deco
         }
     }, [encodedVector, receivedVector]);
 
+    // Decode received vector
     useEffect(() => {
         if(receivedVector){
             try{
@@ -103,15 +105,53 @@ export function VectorFields({ probability, encoderRef: externalEncoderRef, deco
         }
     }, [receivedVector])
 
-    return (
-        <div className="grid grid-cols-1 gap-2">
-            <FieldWithError label="Original Vector" value={originalVector} onChange={setOriginalVector} errorMessage={errorMessage ?? encoderError} />
-            <FieldWithError label="Encoded Vector" value={encodedVector} onChange={setEncodedVector} errorMessage={null} inputProps={{ disabled: true }} />
-            <FieldWithError label="Error Vector" value={errorVector} onChange={setErrorVector} errorMessage={errorVectorError} inputProps={{ disabled: true }} />
-            <FieldWithError label="Received Vector" value={receivedVector} onChange={setReceivedVector} errorMessage={null} />
-            <FieldWithError label="Decoded Vector" value={decodedVector} onChange={setDecodedVector} errorMessage={decodedVectorError} inputProps={{ disabled: true }} />
+return (
+    <div className="grid grid-cols-1 gap-2">
+        <FieldWithError
+            label="Original Vector"
+            value={originalVector}
+            onChange={setOriginalVector}
+            errorMessage={errorMessage ?? encoderError}
+        />
+        <FieldWithError
+            label="Encoded Vector"
+            value={encodedVector}
+            onChange={setEncodedVector}
+            errorMessage={null}
+            inputProps={{ disabled: true }}
+        />
+        <div>
+            <FieldWithError
+                label="Error Vector"
+                value={errorVector}
+                onChange={setErrorVector}
+                errorMessage={errorVectorError}
+                inputProps={{ disabled: true }}
+            />
+            {errorVector && (
+                <p className="text-sm text-gray-600 mt-1">
+                    Number of errors:{" "}
+                    <span className="font-semibold">
+                        {errorVector.split("").filter((b) => b === "1").length}
+                    </span>
+                </p>
+            )}
         </div>
-    )
+        <FieldWithError
+            label="Received Vector"
+            value={receivedVector}
+            onChange={setReceivedVector}
+            errorMessage={null}
+        />
+        <FieldWithError
+            label="Decoded Vector"
+            value={decodedVector}
+            onChange={setDecodedVector}
+            errorMessage={decodedVectorError}
+            inputProps={{ disabled: true }}
+        />
+    </div>
+)
 }
 
 export default VectorFields
