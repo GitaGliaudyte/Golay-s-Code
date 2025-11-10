@@ -7,7 +7,7 @@ import { Encoder } from './encode';
 export class Decoder {
     public static readonly codeLength = 23;
 
-    // Control matrix for Golay code (G|I). Note that this is 12x24 matrix.
+    // Control matrix for Golay code (G|I). Note that this is 24x12 matrix.
     // Identity matrix concatenated with Golay B matrix vertically.
     private static controlMatrix: number[][] =
         IDENTITY_MATRIX.concat(GOLAY_B_MATRIX);
